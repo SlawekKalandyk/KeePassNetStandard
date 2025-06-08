@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace SampleDumpDatabase
 {
-    class Program
+    internal class Program
     {
         private const string SectionSeparator = "****************************************";
         private const string EntrySeparator = "----------------------------------------";

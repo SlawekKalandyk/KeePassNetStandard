@@ -5,7 +5,7 @@ using KeePassNetStandard;
 
 namespace QuickTest
 {
-    class Program
+    internal class Program
     {
         static void Main()
         {
