@@ -11,21 +11,21 @@ function Get-AssemblyAttributes {
     $assemblyInfo = Get-Content $assemblyInfoPath
 
     $attrs = @{}
-    $attrs.Id = Get-AssemblyAttr "AssemblyTitle"
-    $attrs.Version = Get-AssemblyAttr "AssemblyVersion"
+    $attrs.Id = Get-AssemblyAttribute "AssemblyTitle" $assemblyInfo
+    $attrs.Version = Get-AssemblyAttribute "AssemblyVersion" $assemblyInfo
     if ($attrs.Version -match "\.\*$") {
         $attrs.Version = $attrs.Version -replace "\.\*$", ""
     }
-    $attrs.Description = Get-AssemblyAttr "AssemblyDescription"
-    $attrs.Company = Get-AssemblyAttr "AssemblyCompany"
-    $attrs.Product = Get-AssemblyAttr "AssemblyProduct"
+    $attrs.Description = Get-AssemblyAttribute "AssemblyDescription" $assemblyInfo
+    $attrs.Company = Get-AssemblyAttribute "AssemblyCompany" $assemblyInfo
+    $attrs.Product = Get-AssemblyAttribute "AssemblyProduct" $assemblyInfo
     $attrs.Authors = $attrs.Company
     if (-not $attrs.Authors) { $attrs.Authors = "Unknown" }
-    $attrs.Copyright = Get-AssemblyAttr "AssemblyCopyright"
+    $attrs.Copyright = Get-AssemblyAttribute "AssemblyCopyright" $assemblyInfo
     return $attrs
 }
 
-function Get-AssemblyAttr($name) {
+function Get-AssemblyAttribute($name, $assemblyInfo) {
     $pattern = "\[assembly:\s*$name\(""([^""]*)""\)\]"
     $match = $assemblyInfo -match $pattern
     if ($match) {
