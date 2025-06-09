@@ -11,29 +11,16 @@ if (-not (Test-Path $assemblyInfoPath)) {
     exit 1
 }
 
-# Read AssemblyInfo.cs
-$assemblyInfo = Get-Content $assemblyInfoPath
+. (Join-Path $PSScriptRoot 'assembly-attributes.ps1')
 
-function Get-AssemblyAttr($name) {
-    $pattern = "\[assembly:\s*$name\(""([^""]*)""\)\]"
-    $match = $assemblyInfo -match $pattern
-    if ($match) {
-        return ($assemblyInfo | Select-String -Pattern $pattern).Matches[0].Groups[1].Value
-    }
-    return ""
-}
-
-$id = Get-AssemblyAttr "AssemblyTitle"
-$description = Get-AssemblyAttr "AssemblyDescription"
-$company = Get-AssemblyAttr "AssemblyCompany"
-$product = Get-AssemblyAttr "AssemblyProduct"
-$copyright = Get-AssemblyAttr "AssemblyCopyright"
-$version = Get-AssemblyAttr "AssemblyVersion"
-if ($version -match "\.\*$") {
-    $version = $version -replace "\.\*$", ""
-}
-$authors = $company
-if (-not $authors) { $authors = "Unknown" }
+$attrs = Get-AssemblyAttributes -assemblyInfoPath $assemblyInfoPath
+$id = $attrs.Id
+$version = $attrs.Version
+$description = $attrs.Description
+$company = $attrs.Company
+$product = $attrs.Product
+$authors = $attrs.Authors
+$copyright = $attrs.Copyright
 
 # Collect and deduplicate dependencies
 $depDict = @{}

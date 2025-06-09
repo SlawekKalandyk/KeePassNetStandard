@@ -7,11 +7,19 @@ $assemblyInfoPath = Join-Path $baseDir 'KeePassLib\Properties\AssemblyInfo.cs'
 $outputPath = Join-Path $baseDir 'KeePassNetStandard.nuspec'
 
 $nuspecScript = Join-Path $PSScriptRoot 'generate-nuspec.ps1'
+$buildPropsScript = Join-Path $PSScriptRoot 'generate-build-props.ps1'
 
 if (-not (Test-Path $nuspecScript)) {
     Write-Error "generate-nuspec.ps1 not found in $PSScriptRoot"
     exit 1
 }
+
+if (-not (Test-Path $buildPropsScript)) {
+    Write-Error "generate-build-props.ps1 not found in $PSScriptRoot"
+    exit 1
+}
+
+& $buildPropsScript
 
 # Build both projects in Release mode
 foreach ($csproj in $csprojPaths) {
